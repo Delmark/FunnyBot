@@ -20,7 +20,8 @@ public class Joke {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="Joke")
+    @Lob
+    @Column(name="Joke", columnDefinition = "TEXT")
     private String joke;
 
     @Column(name = "creation_date")

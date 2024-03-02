@@ -35,6 +35,7 @@ public class JokeServiceImpl implements JokeService{
             Joke editedJoke = jokeForEdit.get();
             editedJoke.setJoke(joke.getJoke());
             editedJoke.setUpdateDate(LocalDate.now());
+            jokeRepository.save(editedJoke);
             return true;
         }
         else {
