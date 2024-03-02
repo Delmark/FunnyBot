@@ -18,14 +18,14 @@ public class Joke {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
     @Column(name="Joke")
-    String joke;
+    private String joke;
 
     @Column(name = "creation_date")
-    LocalDate creationDate;
+    private LocalDate creationDate;
 
     @Column(name = "update_date")
-    LocalDate updateDate;
+    private LocalDate updateDate;
 }
