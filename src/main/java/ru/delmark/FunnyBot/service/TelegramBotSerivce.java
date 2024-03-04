@@ -2,12 +2,11 @@ package ru.delmark.FunnyBot.service;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.InlineQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-import com.pengrad.telegrambot.model.request.Keyboard;
-import com.pengrad.telegrambot.model.request.KeyboardButton;
-import com.pengrad.telegrambot.model.request.ParseMode;
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.model.request.*;
+import com.pengrad.telegrambot.request.AnswerInlineQuery;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ public class TelegramBotSerivce {
 
     private final JokeService jokeService;
     private final TelegramBot bot;
-
     private final WatchedJokesSerivce watchedJokesSerivce;
 
     private static final Keyboard keyboard = new ReplyKeyboardMarkup(new KeyboardButton("Хочу шутку"), new KeyboardButton("Хочу шутку которую ещё не видел!"));
@@ -36,10 +34,26 @@ public class TelegramBotSerivce {
 
         bot.setUpdatesListener(updates -> {
             for (Update update : updates) {
-                handleUpdate(update);
+                if (update.inlineQuery() == null) {
+                    handleUpdate(update);
+                }
+                else {
+                    handleInlineQuery(update.inlineQuery());
+                }
             }
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
+    }
+
+    private void handleInlineQuery(InlineQuery query) {
+        List<Joke> jokesList = jokeService.getAllJokes();
+        Random rng = new Random();
+        int randomNum = rng.nextInt(jokesList.size());
+        InlineQueryResultArticle answer = new InlineQueryResultArticle("1",
+                "Случайный анекдот",
+                new InputTextMessageContent(jokesList.get(randomNum).getJoke()));
+
+        bot.execute(new AnswerInlineQuery(query.id(), answer).cacheTime(0));
     }
 
     private void handleUpdate(Update update) {
