@@ -29,4 +29,7 @@ public class Joke {
 
     @Column(name = "update_date")
     private LocalDate updateDate;
+
+    @ManyToOne
+    private WatchedJokes user;
 }
