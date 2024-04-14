@@ -3,9 +3,12 @@ package ru.delmark.FunnyBot.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.delmark.FunnyBot.model.Joke;
+import ru.delmark.FunnyBot.model.JokeCall;
 import ru.delmark.FunnyBot.repository.JokeRepository;
+import utils.NowService;
+import utils.NowServiceImpl;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,16 +17,23 @@ import java.util.Optional;
 public class JokeServiceImpl implements JokeService{
 
     private final JokeRepository jokeRepository;
+    private final NowService nowService = new NowServiceImpl();
 
     @Override
     public Joke addJoke(Joke joke) {
-        joke.setUpdateDate(LocalDate.now());
-        joke.setCreationDate(LocalDate.now());
+        joke.setUpdateDate(nowService.getCurrentDate());
+        joke.setCreationDate(nowService.getCurrentDate());
+        joke.setJokeCalls(new ArrayList<>());
         return jokeRepository.save(joke);
     }
 
     @Override
     public Optional<Joke> getJokebyId(Long id) {
+        Optional<Joke> joke = jokeRepository.findById(id);
+        joke.ifPresent(value -> {
+            value.getJokeCalls().add(new JokeCall(null, value, nowService.getCurrentDate()));
+            jokeRepository.saveAndFlush(value);
+        });
         return jokeRepository.findById(id);
     }
 
@@ -34,7 +44,7 @@ public class JokeServiceImpl implements JokeService{
         if (jokeForEdit.isPresent()) {
             Joke editedJoke = jokeForEdit.get();
             editedJoke.setJoke(joke.getJoke());
-            editedJoke.setUpdateDate(LocalDate.now());
+            editedJoke.setUpdateDate(nowService.getCurrentDate());
             jokeRepository.save(editedJoke);
             return Optional.of(editedJoke);
         }
