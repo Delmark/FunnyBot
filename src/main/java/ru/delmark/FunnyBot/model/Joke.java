@@ -1,6 +1,7 @@
 package ru.delmark.FunnyBot.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,16 +14,18 @@ import java.time.LocalDate;
 @ToString
 @Entity(name="Joke")
 @Table(name="Joke")
+@EqualsAndHashCode
 public class Joke {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Lob
     @Column(name="Joke", columnDefinition = "TEXT")
     private String joke;
+
 
     @Column(name = "creation_date")
     private LocalDate creationDate;

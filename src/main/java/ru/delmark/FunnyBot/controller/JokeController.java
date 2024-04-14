@@ -40,9 +40,11 @@ public class JokeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> editJoke(@PathVariable("id") long id, @RequestBody Joke jokeForEdit) {
-        if (jokeService.editJoke(id, jokeForEdit)) {
-            return ResponseEntity.ok("Joke edited!");
+    public ResponseEntity<Joke> editJoke(@PathVariable("id") long id, @RequestBody Joke jokeForEdit) {
+        Optional<Joke> editedJoke = jokeService.editJoke(id, jokeForEdit);
+
+        if (editedJoke.isPresent()) {
+            return ResponseEntity.ok(editedJoke.get());
         }
         else {
             return ResponseEntity.badRequest().build();

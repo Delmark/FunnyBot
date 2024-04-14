@@ -23,12 +23,12 @@ public class JokeServiceImpl implements JokeService{
     }
 
     @Override
-    public Optional<Joke> getJokebyId(long id) {
+    public Optional<Joke> getJokebyId(Long id) {
         return jokeRepository.findById(id);
     }
 
     @Override
-    public boolean editJoke(long id, Joke joke) {
+    public Optional<Joke> editJoke(Long id, Joke joke) {
         Optional<Joke> jokeForEdit = jokeRepository.findById(id);
 
         if (jokeForEdit.isPresent()) {
@@ -36,15 +36,15 @@ public class JokeServiceImpl implements JokeService{
             editedJoke.setJoke(joke.getJoke());
             editedJoke.setUpdateDate(LocalDate.now());
             jokeRepository.save(editedJoke);
-            return true;
+            return Optional.of(editedJoke);
         }
         else {
-            return false;
+            return Optional.empty();
         }
     }
 
     @Override
-    public boolean deleteJoke(long id) {
+    public boolean deleteJoke(Long id) {
         Optional<Joke> joke = jokeRepository.findById(id);
 
         if (joke.isPresent()) {
