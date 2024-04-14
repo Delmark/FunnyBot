@@ -1,8 +1,6 @@
 package ru.delmark.FunnyBot.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,17 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.delmark.FunnyBot.model.Joke;
 import ru.delmark.FunnyBot.model.JokeCall;
 import ru.delmark.FunnyBot.repository.JokeRepository;
-import utils.NowService;
+import ru.delmark.FunnyBot.utils.NowService;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,6 +60,7 @@ class JokeControllerTest {
     }
 
     @Test
+    @DisplayName("Получение всех шуток")
     void getAllJokes() throws Exception {
         Joke savedJoke = new Joke(1L, "Test Joke", date, date, new ArrayList<>());
         jokeRepository.saveAndFlush(savedJoke);
@@ -74,6 +71,7 @@ class JokeControllerTest {
     }
 
     @Test
+    @DisplayName("Получение шутки по ID")
     void getJokeById() throws Exception {
         Joke savedJoke = new Joke(1L, "TestJoke", date, date, new ArrayList<>());
         Joke expectedJoke = new Joke(1L, "TestJoke", date, date, List.of(new JokeCall(1L, savedJoke, date)));
@@ -85,6 +83,7 @@ class JokeControllerTest {
     }
 
     @Test
+    @DisplayName("Редактирование шутки")
     void editJoke() throws Exception {
         Joke savedJoke = new Joke(1L, "The man put on a hat,", date, date, new ArrayList<>());
         Joke inputJoke = new Joke(null, "The man put on a hat, and it was just for him", null, null, null);
@@ -99,6 +98,7 @@ class JokeControllerTest {
     }
 
     @Test
+    @DisplayName("Удаление шутки")
     void deleteJoke() throws Exception {
         Joke savedJoke = new Joke(1L, "The man put on a hat, and it was just for him", date, date, new ArrayList<>());
         jokeRepository.save(savedJoke);

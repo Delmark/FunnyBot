@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.delmark.FunnyBot.model.Joke;
 import ru.delmark.FunnyBot.model.JokeCall;
 import ru.delmark.FunnyBot.repository.JokeRepository;
-import utils.NowService;
-import utils.NowServiceImpl;
+import ru.delmark.FunnyBot.utils.NowService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,13 +17,16 @@ import java.util.Optional;
 public class JokeServiceImpl implements JokeService{
 
     private final JokeRepository jokeRepository;
-    private final NowService nowService = new NowServiceImpl();
+    private final NowService nowService;
 
     @Override
     public Joke addJoke(Joke joke) {
-        joke.setUpdateDate(nowService.getCurrentDate());
-        joke.setCreationDate(nowService.getCurrentDate());
+        Date currentDate = nowService.getCurrentDate();
+
+        joke.setUpdateDate(currentDate);
+        joke.setCreationDate(currentDate);
         joke.setJokeCalls(new ArrayList<>());
+
         return jokeRepository.save(joke);
     }
 
@@ -58,7 +61,7 @@ public class JokeServiceImpl implements JokeService{
         Optional<Joke> joke = jokeRepository.findById(id);
 
         if (joke.isPresent()) {
-            jokeRepository.delete(joke.get());
+            jokeRepository.deleteById(id);
             return true;
         }
         else {

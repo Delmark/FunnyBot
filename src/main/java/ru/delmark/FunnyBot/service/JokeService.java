@@ -3,7 +3,6 @@ package ru.delmark.FunnyBot.service;
 import org.springframework.stereotype.Service;
 import ru.delmark.FunnyBot.model.Joke;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

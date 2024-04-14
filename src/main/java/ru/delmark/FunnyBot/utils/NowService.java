@@ -1,4 +1,4 @@
-package utils;
+package ru.delmark.FunnyBot.utils;
 
 import jakarta.persistence.Column;
 import org.springframework.stereotype.Component;
