@@ -30,7 +30,8 @@ public class Joke {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "joke_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(sequenceName = "joke_seq", name = "joke_seq", allocationSize = 1)
     private Long id;
 
     @Lob

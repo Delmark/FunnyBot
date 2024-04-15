@@ -1,16 +1,17 @@
 package ru.delmark.FunnyBot.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.delmark.FunnyBot.model.Joke;
 import ru.delmark.FunnyBot.model.JokeCall;
 import ru.delmark.FunnyBot.repository.JokeRepository;
 import ru.delmark.FunnyBot.utils.NowService;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -25,11 +26,11 @@ public class JokeServiceImpl implements JokeService{
 
         joke.setUpdateDate(currentDate);
         joke.setCreationDate(currentDate);
-        joke.setJokeCalls(new ArrayList<>());
 
         return jokeRepository.save(joke);
     }
 
+    //@Transactional
     @Override
     public Optional<Joke> getJokebyId(Long id) {
         Optional<Joke> joke = jokeRepository.findById(id);
@@ -70,7 +71,35 @@ public class JokeServiceImpl implements JokeService{
     }
 
     @Override
-    public List<Joke> getAllJokes() {
-        return jokeRepository.findAll();
+    public Page<Joke> getAllJokes(int page) {
+        return jokeRepository.findAll(PageRequest.of(page, 10));
+    }
+
+    @Transactional
+    @Override
+    public Joke getRandomJoke() {
+        List<Joke> allJokes = jokeRepository.findAll();
+        Joke randomJoke = allJokes.get(new Random().nextInt(0, allJokes.size()));
+        randomJoke.getJokeCalls().add(new JokeCall(null, randomJoke, nowService.getCurrentDate()));
+        return jokeRepository.saveAndFlush(randomJoke);
+    }
+
+//    Достойно остаться в коде как первая реализация, почтим погибших за невнимательность
+//
+//    @Transactional
+//    @Override
+//    public List<Joke> getTop5Jokes() {
+//        List<Joke> allJokes = getAllJokes();
+//        allJokes.sort(Comparator.comparingInt(
+//                (Joke value) -> value.getJokeCalls().size())
+//                .reversed());
+//        return  (allJokes.size() > 5) ? allJokes.subList(0, 5) : allJokes;
+//    }
+
+    public Page<Joke> getTop5JokesPage() {
+        return jokeRepository.findAll(
+                PageRequest.of(0,5,
+                        Sort.by(Sort.Direction.ASC, "jokeCalls")
+                ));
     }
 }

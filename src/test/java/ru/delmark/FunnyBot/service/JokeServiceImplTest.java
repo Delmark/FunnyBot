@@ -35,7 +35,7 @@ class JokeServiceImplTest {
     void addJoke() {
         Joke inputJoke = new Joke(null, "Надел грузин шляпу, а она ему как раз", null, null);
         Joke expectedJoke = new Joke(1L, "Надел грузин шляпу, а она ему как раз", date, date, new ArrayList<>());
-        Joke expectedToSave = new Joke(inputJoke.getId(), inputJoke.getJoke(), date, date, new ArrayList<>());
+        Joke expectedToSave = new Joke(inputJoke.getId(), inputJoke.getJoke(), date, date);
         Mockito.when(jokeRepository.save(expectedToSave)).
                 thenReturn(expectedJoke);
         assertEquals(jokeService.addJoke(inputJoke), expectedJoke);

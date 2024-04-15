@@ -1,5 +1,6 @@
 package ru.delmark.FunnyBot.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import ru.delmark.FunnyBot.model.Joke;
 
@@ -12,5 +13,7 @@ public interface JokeService {
     public Optional<Joke> getJokebyId(Long id);
     public Optional<Joke> editJoke(Long id, Joke joke);
     public boolean deleteJoke(Long id);
-    public List<Joke> getAllJokes();
+    public Page<Joke> getAllJokes(int page);
+    public Joke getRandomJoke();
+    public Page<Joke> getTop5JokesPage();
 }

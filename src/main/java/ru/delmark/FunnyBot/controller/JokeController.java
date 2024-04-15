@@ -1,6 +1,7 @@
 package ru.delmark.FunnyBot.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.delmark.FunnyBot.model.Joke;
@@ -29,14 +30,20 @@ public class JokeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Joke>> getAllJokes() {
-        return ResponseEntity.ok(jokeService.getAllJokes());
+    public ResponseEntity<Page<Joke>> getAllJokes(@RequestParam int page) {
+        return ResponseEntity.ok(jokeService.getAllJokes(page));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Joke> getJokeById(@PathVariable("id") long id) {
         Optional<Joke> joke = jokeService.getJokebyId(id);
         return joke.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+
+    @GetMapping("/topJokes")
+    private ResponseEntity<Page<Joke>> getTop5Jokes2() {
+        return ResponseEntity.ok(jokeService.getTop5JokesPage());
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,7 @@
 package ru.delmark.FunnyBot.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,14 +50,16 @@ class JokeControllerTest {
     @DisplayName("Создание шутки")
     void createJoke() throws Exception {
         Joke inputJoke = new Joke(null, "Test joke", null, null, null);
-        Joke expectedJoke = new Joke(1L, "Test joke", date, date, new ArrayList<>());
+        Joke expectedJoke = new Joke(1L, "Test joke", date, date);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/jokes").
                 content(objectMapper.writeValueAsString(inputJoke)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(expectedJoke)));
-        assertEquals(jokeRepository.findById(1L).get(), expectedJoke);
+
+        // Lazy Exception??
+        assertEquals(expectedJoke, jokeRepository.findById(1L).get());
     }
 
     @Test
@@ -94,7 +97,9 @@ class JokeControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(expectedJoke)));
-        assertEquals(jokeRepository.findById(1L).get(), expectedJoke);
+
+        // Lazy Exception??
+        assertEquals(expectedJoke, jokeRepository.findById(1L).get());
     }
 
     @Test
