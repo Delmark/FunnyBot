@@ -50,4 +50,8 @@ public class Joke {
     @OneToMany(mappedBy = "joke", cascade = CascadeType.ALL)
     private List<JokeCall> jokeCalls;
 
+    private int size() {
+        return jokeCalls.size();
+    }
+
 }

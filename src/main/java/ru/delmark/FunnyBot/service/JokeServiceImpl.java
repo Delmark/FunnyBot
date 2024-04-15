@@ -84,22 +84,20 @@ public class JokeServiceImpl implements JokeService{
         return jokeRepository.saveAndFlush(randomJoke);
     }
 
-//    Достойно остаться в коде как первая реализация, почтим погибших за невнимательность
-//
-//    @Transactional
-//    @Override
-//    public List<Joke> getTop5Jokes() {
-//        List<Joke> allJokes = getAllJokes();
-//        allJokes.sort(Comparator.comparingInt(
-//                (Joke value) -> value.getJokeCalls().size())
-//                .reversed());
-//        return  (allJokes.size() > 5) ? allJokes.subList(0, 5) : allJokes;
-//    }
-
-    public Page<Joke> getTop5JokesPage() {
-        return jokeRepository.findAll(
-                PageRequest.of(0,5,
-                        Sort.by(Sort.Direction.ASC, "jokeCalls")
-                ));
+    @Transactional
+    @Override
+    public List<Joke> getTop5Jokes() {
+        List<Joke> allJokes = jokeRepository.findAll();
+        allJokes.sort(Comparator.comparingInt(
+                (Joke value) -> value.getJokeCalls().size())
+                .reversed());
+        return  (allJokes.size() > 5) ? allJokes.subList(0, 5) : allJokes;
     }
+
+//    public Page<Joke> getTop5JokesPage() {
+//        return jokeRepository.findAll(
+//                PageRequest.of(0,50,
+//                        Sort.by(Sort.Direction.ASC, "jokeCalls")
+//                ));
+//    }
 }

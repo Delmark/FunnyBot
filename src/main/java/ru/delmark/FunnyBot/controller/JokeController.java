@@ -42,8 +42,8 @@ public class JokeController {
 
 
     @GetMapping("/topJokes")
-    private ResponseEntity<Page<Joke>> getTop5Jokes2() {
-        return ResponseEntity.ok(jokeService.getTop5JokesPage());
+    private ResponseEntity<List<Joke>> getTop5Jokes() {
+        return ResponseEntity.ok(jokeService.getTop5Jokes());
     }
 
     @PutMapping("/{id}")
