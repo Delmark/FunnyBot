@@ -14,6 +14,6 @@ public interface JokeService {
     public Optional<Joke> editJoke(Long id, Joke joke);
     public boolean deleteJoke(Long id);
     public Page<Joke> getAllJokes(int page);
-    public Joke getRandomJoke();
+    public Joke getRandomJoke(Long userId);
     public List<Joke> getTop5Jokes();
 }

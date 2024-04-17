@@ -62,7 +62,7 @@ public class TelegramBotSerivce {
             if (message.startsWith("/start")) {
                 answer = "Чат-бот с анекдотами!\nЗдесь хранится набор самых смешных и не очень анекдотов.\n\nЕсли хотите услышать <strong>случайный анекдот</strong> введите /joke или нажмите на кнопку!";
             } else if (message.startsWith("/joke") || message.equals("Хочу шутку")) {
-                answer = jokeService.getRandomJoke().getJoke();
+                answer = jokeService.getRandomJoke(update.message().from().id()).getJoke();
             } else if (message.startsWith("/getAllJokes") || message.equals("Хочу все шутки")) {
                 forLine = true;
                 Page<Joke> page = jokeService.getAllJokes(0);

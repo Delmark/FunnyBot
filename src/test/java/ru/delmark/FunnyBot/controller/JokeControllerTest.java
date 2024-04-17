@@ -9,6 +9,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -67,10 +71,16 @@ class JokeControllerTest {
     void getAllJokes() throws Exception {
         Joke savedJoke = new Joke(1L, "Test Joke", date, date, new ArrayList<>());
         jokeRepository.saveAndFlush(savedJoke);
-        mockMvc.perform(MockMvcRequestBuilders.get("/jokes"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/jokes?page=0"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(List.of((savedJoke)))));
+                .andExpect(MockMvcResultMatchers.content().string(
+                        objectMapper.writeValueAsString(
+                                new PageImpl<>(List.of(savedJoke),
+                                        PageRequest.of(0,10),
+                                        1)
+                        )
+                ));
     }
 
     @Test

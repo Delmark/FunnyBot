@@ -77,10 +77,10 @@ public class JokeServiceImpl implements JokeService{
 
     @Transactional
     @Override
-    public Joke getRandomJoke() {
+    public Joke getRandomJoke(Long userID) {
         List<Joke> allJokes = jokeRepository.findAll();
         Joke randomJoke = allJokes.get(new Random().nextInt(0, allJokes.size()));
-        randomJoke.getJokeCalls().add(new JokeCall(null, randomJoke, nowService.getCurrentDate()));
+        randomJoke.getJokeCalls().add(new JokeCall(null, randomJoke,userID , nowService.getCurrentDate()));
         return jokeRepository.saveAndFlush(randomJoke);
     }
 
