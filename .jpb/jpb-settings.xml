@@ -8,6 +8,9 @@
       </database-info>
     </database-infos>
   </component>
+  <component name="JpaPluginProjectSettings">
+    <option name="lastSelectedLanguage" value="Java" />
+  </component>
   <component name="PersistenceUnitSettings">
     <persistence-units>
       <persistence-unit name="Default" defaultSearchScope="Project">

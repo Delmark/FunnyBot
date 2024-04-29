@@ -30,12 +30,12 @@ public class JokeController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Joke>> getAllJokes(@RequestParam int page) {
+    public ResponseEntity<Page<Joke>> getAllJokes(@RequestParam Integer page) {
         return ResponseEntity.ok(jokeService.getAllJokes(page));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Joke> getJokeById(@PathVariable("id") long id) {
+    public ResponseEntity<Joke> getJokeById(@PathVariable(name = "id") Long id) {
         Optional<Joke> joke = jokeService.getJokebyId(id);
         return joke.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
@@ -47,24 +47,15 @@ public class JokeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Joke> editJoke(@PathVariable("id") long id, @RequestBody Joke jokeForEdit) {
+    public ResponseEntity<Joke> editJoke(@PathVariable(name = "id") Long id, @RequestBody Joke jokeForEdit) {
         Optional<Joke> editedJoke = jokeService.editJoke(id, jokeForEdit);
 
-        if (editedJoke.isPresent()) {
-            return ResponseEntity.ok(editedJoke.get());
-        }
-        else {
-            return ResponseEntity.badRequest().build();
-        }
+        return editedJoke.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteJoke(@PathVariable("id") long id) {
-        if (jokeService.deleteJoke(id)) {
-            return ResponseEntity.ok("Deleted joke");
-        }
-        else {
-            return ResponseEntity.badRequest().body("Joke not found");
-        }
+    public ResponseEntity<Void> deleteJoke(@PathVariable(name = "id") Long id) {
+        jokeService.deleteJoke(id);
+        return ResponseEntity.ok().build();
     }
 }

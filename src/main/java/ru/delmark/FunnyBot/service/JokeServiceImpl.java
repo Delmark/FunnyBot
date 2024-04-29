@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.delmark.FunnyBot.exceptions.NoSuchJokeException;
 import ru.delmark.FunnyBot.model.Joke;
 import ru.delmark.FunnyBot.model.JokeCall;
 import ru.delmark.FunnyBot.repository.JokeRepository;
@@ -43,31 +44,19 @@ public class JokeServiceImpl implements JokeService{
 
     @Override
     public Optional<Joke> editJoke(Long id, Joke joke) {
-        Optional<Joke> jokeForEdit = jokeRepository.findById(id);
+        Joke jokeForEdit = jokeRepository.findById(id).orElseThrow(NoSuchJokeException::new);
 
-        if (jokeForEdit.isPresent()) {
-            Joke editedJoke = jokeForEdit.get();
-            editedJoke.setJoke(joke.getJoke());
-            editedJoke.setUpdateDate(nowService.getCurrentDate());
-            jokeRepository.save(editedJoke);
-            return Optional.of(editedJoke);
-        }
-        else {
-            return Optional.empty();
-        }
+        jokeForEdit.setJoke(joke.getJoke());
+        jokeForEdit.setUpdateDate(nowService.getCurrentDate());
+        jokeRepository.save(jokeForEdit);
+        return Optional.of(jokeForEdit);
     }
 
     @Override
-    public boolean deleteJoke(Long id) {
-        Optional<Joke> joke = jokeRepository.findById(id);
+    public void deleteJoke(Long id) {
+        Joke joke = jokeRepository.findById(id).orElseThrow(NoSuchJokeException::new);
 
-        if (joke.isPresent()) {
-            jokeRepository.deleteById(id);
-            return true;
-        }
-        else {
-            return false;
-        }
+        jokeRepository.delete(joke);
     }
 
     @Override
