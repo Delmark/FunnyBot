@@ -25,6 +25,7 @@ PUT /users/removeRole?userId={id}&roleId={id} - Удалить роль у по�
 DELETE /users/deleteUser?userId={id} - Удалить пользователя
 ```
 Для запроса ``` POST /users/register ``` небходимо в теле запроса иметь JSON следующей формы:
+```
 {
     "username": string,
     "password": string
