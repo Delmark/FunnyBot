@@ -1,6 +1,7 @@
 
 ## :black_joker: Телеграм Бот с анекдотами на Spring Boot :black_joker:
 Реализован телеграм бот (на базе [библиотеки Telegram-Bot-API](https://github.com/pengrad/java-telegram-bot-api/tree/master)) с помощью Telegram API, Spring Boot, JPA, Spring Security.
+```
 GET /jokes?page={page} - выдача всех шуток, реализована пагинация, вместо page принимается параметр страницы.
 GET /jokes/{id} - выдача шутки с определенным ID
 GET jokes/topJokes - выдача 5 самых популярных шуток (по количеству вызовов в API и боте)
