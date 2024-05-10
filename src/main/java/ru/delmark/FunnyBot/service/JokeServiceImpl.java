@@ -76,11 +76,12 @@ public class JokeServiceImpl implements JokeService{
     @Transactional
     @Override
     public List<Joke> getTop5Jokes() {
-        List<Joke> allJokes = jokeRepository.findAll();
-        allJokes.sort(Comparator.comparingInt(
-                (Joke value) -> value.getJokeCalls().size())
-                .reversed());
-        return  (allJokes.size() > 5) ? allJokes.subList(0, 5) : allJokes;
+//        List<Joke> allJokes = jokeRepository.findAll();
+//        allJokes.sort(Comparator.comparingInt(
+//                (Joke value) -> value.getJokeCalls().size())
+//                .reversed());
+//        return  (allJokes.size() > 5) ? allJokes.subList(0, 5) : allJokes;
+        return jokeRepository.getTopJokes();
     }
 
 //    public Page<Joke> getTop5JokesPage() {

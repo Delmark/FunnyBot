@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class TelegramBotSerivce {
@@ -30,7 +31,8 @@ public class TelegramBotSerivce {
 
     private static final Keyboard keyboard = new ReplyKeyboardMarkup(
             new KeyboardButton("Хочу шутку"),
-            new KeyboardButton("Хочу все шутки")
+            new KeyboardButton("Хочу все шутки"),
+            new KeyboardButton("Вывести топ шуток")
     );
 
     private static final InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup(
@@ -63,6 +65,9 @@ public class TelegramBotSerivce {
                 answer = "Чат-бот с анекдотами!\nЗдесь хранится набор самых смешных и не очень анекдотов.\n\nЕсли хотите услышать <strong>случайный анекдот</strong> введите /joke или нажмите на кнопку!";
             } else if (message.startsWith("/joke") || message.equals("Хочу шутку")) {
                 answer = jokeService.getRandomJoke(update.message().from().id()).getJoke();
+            } else if (message.startsWith("/getTop5Jokes") || message.equals("Вывести топ шуток")) {
+                List<String> jokes = jokeService.getTop5Jokes().stream().map(Joke::getJoke).collect(Collectors.toList());
+                answer = String.join("\n\n", jokes);
             } else if (message.startsWith("/getAllJokes") || message.equals("Хочу все шутки")) {
                 forLine = true;
                 Page<Joke> page = jokeService.getAllJokes(0);
