@@ -31,7 +31,7 @@ public class JokeServiceImpl implements JokeService{
         return jokeRepository.save(joke);
     }
 
-    //@Transactional
+    @Transactional
     @Override
     public Optional<Joke> getJokebyId(Long id) {
         Optional<Joke> joke = jokeRepository.findById(id);
@@ -76,18 +76,6 @@ public class JokeServiceImpl implements JokeService{
     @Transactional
     @Override
     public List<Joke> getTop5Jokes() {
-//        List<Joke> allJokes = jokeRepository.findAll();
-//        allJokes.sort(Comparator.comparingInt(
-//                (Joke value) -> value.getJokeCalls().size())
-//                .reversed());
-//        return  (allJokes.size() > 5) ? allJokes.subList(0, 5) : allJokes;
         return jokeRepository.getTopJokes();
     }
-
-//    public Page<Joke> getTop5JokesPage() {
-//        return jokeRepository.findAll(
-//                PageRequest.of(0,50,
-//                        Sort.by(Sort.Direction.ASC, "jokeCalls")
-//                ));
-//    }
 }

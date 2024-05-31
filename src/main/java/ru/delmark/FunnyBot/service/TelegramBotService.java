@@ -6,7 +6,6 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.*;
-import com.pengrad.telegrambot.request.AnswerCallbackQuery;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -16,13 +15,11 @@ import org.springframework.stereotype.Service;
 import ru.delmark.FunnyBot.model.Joke;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
-public class TelegramBotSerivce {
+public class TelegramBotService {
 
     private final HashMap<User, Integer> userPage = new HashMap<>();
 
@@ -40,7 +37,7 @@ public class TelegramBotSerivce {
     );
 
     @Autowired
-    public TelegramBotSerivce(TelegramBot telegramBot, JokeService jokeService) {
+    public TelegramBotService(TelegramBot telegramBot, JokeService jokeService) {
         this.bot = telegramBot;
         this.jokeService = jokeService;
 
@@ -52,7 +49,7 @@ public class TelegramBotSerivce {
         });
     }
 
-    private void handleUpdate(Update update) {
+    public void handleUpdate(Update update) {
 
         boolean forLine = false;
         String answer;

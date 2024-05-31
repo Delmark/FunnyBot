@@ -47,6 +47,7 @@ public class Joke {
     private Date updateDate;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ToString.Exclude
     @OneToMany(mappedBy = "joke", cascade = CascadeType.ALL)
     private List<JokeCall> jokeCalls;
 

@@ -21,6 +21,7 @@ public class SecuriyConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers(HttpMethod.GET, "/actuator/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/jokes/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("ADMIN", "MODERATOR")
                                 .requestMatchers(HttpMethod.POST, "/jokes").authenticated()

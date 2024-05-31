@@ -42,7 +42,7 @@ public class JokeController {
 
 
     @GetMapping("/topJokes")
-    private ResponseEntity<List<Joke>> getTop5Jokes() {
+    public ResponseEntity<List<Joke>> getTop5Jokes() {
         return ResponseEntity.ok(jokeService.getTop5Jokes());
     }
 

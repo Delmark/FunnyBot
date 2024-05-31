@@ -4,10 +4,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ru.delmark.FunnyBot.model.Role;
 import ru.delmark.FunnyBot.repository.RoleRepository;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
+@EnableTransactionManagement
 public class FunnyBotApplication {
 
 	public static void main(String[] args) {
