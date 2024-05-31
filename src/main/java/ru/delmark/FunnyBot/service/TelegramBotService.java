@@ -7,9 +7,12 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.*;
+import com.pengrad.telegrambot.request.AnswerInlineQuery;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.BaseResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TelegramBotService {
 
     private final HashMap<User, Integer> userPage = new HashMap<>();
@@ -51,7 +55,7 @@ public class TelegramBotService {
     }
 
     public void handleUpdate(Update update) {
-        if (update.callbackQuery() == null) {
+        if (update.message() != null) {
             String command = handleKeyboardInput(update.message());
 
             switch (command) {
@@ -61,6 +65,9 @@ public class TelegramBotService {
                 case "/getTop5Jokes" -> onTopJokesCommand(update);
                 default -> onUnknownCommand(update);
             }
+        }
+        else if (update.inlineQuery() != null) {
+            onInlineQueryJokeCommand(update);
         }
         else {
             CallbackQuery callbackQuery = update.callbackQuery();
@@ -86,6 +93,20 @@ public class TelegramBotService {
                         .disableNotification(true)
                         .replyMarkup(keyboard)
         );
+    }
+
+    public void onInlineQueryJokeCommand(Update update) {
+        String response = jokeService.getRandomJoke(update.inlineQuery().from().id()).getJoke();
+        BaseResponse apiResponse = bot.execute(
+                new AnswerInlineQuery(
+                        update.inlineQuery().id(),
+                        new InlineQueryResultArticle(
+                                update.inlineQuery().id(),
+                                "Шутка!",
+                                response)
+                ).cacheTime(0)
+        );
+        log.info(apiResponse.toString());
     }
 
     public void onTopJokesCommand(Update update) {
