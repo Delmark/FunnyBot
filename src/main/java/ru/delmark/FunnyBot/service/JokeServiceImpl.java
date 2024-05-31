@@ -78,4 +78,12 @@ public class JokeServiceImpl implements JokeService{
     public List<Joke> getTop5Jokes() {
         return jokeRepository.getTopJokes();
     }
+
+    @Override
+    public Joke getRandomJoke() {
+        Joke joke = jokeRepository.getRandomJoke();
+        joke.getJokeCalls().add(new JokeCall(null, joke, nowService.getCurrentDate()));
+        jokeRepository.saveAndFlush(joke);
+        return joke;
+    }
 }

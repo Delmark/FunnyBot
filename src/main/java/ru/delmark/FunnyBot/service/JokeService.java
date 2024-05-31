@@ -9,11 +9,12 @@ import java.util.Optional;
 
 @Service
 public interface JokeService {
-    public Joke addJoke(Joke joke);
-    public Optional<Joke> getJokebyId(Long id);
-    public Optional<Joke> editJoke(Long id, Joke joke);
-    public void deleteJoke(Long id);
-    public Page<Joke> getAllJokes(int page);
-    public Joke getRandomJoke(Long userId);
-    public List<Joke> getTop5Jokes();
+    Joke addJoke(Joke joke);
+    Optional<Joke> getJokebyId(Long id);
+    Optional<Joke> editJoke(Long id, Joke joke);
+    void deleteJoke(Long id);
+    Page<Joke> getAllJokes(int page);
+    Joke getRandomJoke(Long userId);
+    List<Joke> getTop5Jokes();
+    Joke getRandomJoke();
 }
