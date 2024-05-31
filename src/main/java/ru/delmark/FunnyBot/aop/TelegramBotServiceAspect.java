@@ -15,9 +15,10 @@ import java.util.Arrays;
 @Aspect
 public class TelegramBotServiceAspect {
 
-    @Pointcut("execution(public * ru.delmark.FunnyBot.service.TelegramBotService.handleUpdate(*))")
+    @Pointcut("execution(public * ru.delmark.FunnyBot.service.TelegramBotService.handleUpdate(..))")
     public void handleUpdatePointcut() {}
 
+    // Не работает?
     @Before("handleUpdatePointcut()")
     public void logUpdateDetails(JoinPoint joinPoint) {
         Update update = (Update) Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
